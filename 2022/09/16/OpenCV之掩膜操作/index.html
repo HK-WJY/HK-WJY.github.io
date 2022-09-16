@@ -15,14 +15,14 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="OpenCV之掩膜操作">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/.com//blog/public/img/%E9%94%90%E5%8C%96%E5%8D%B7%E7%A7%AF%E6%A0%B8.png">
-<meta property="og:image" content="http://example.com/.com//blog/public/img/%E5%9B%BE%E5%83%8F%E6%93%8D%E4%BD%9C.png">
-<meta property="og:image" content="http://example.com/.com//blog/public/img/%E5%9B%BE%E5%83%8F%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E9%94%90%E5%8C%96%E5%8D%B7%E7%A7%AF%E6%A0%B8.png">
+<meta property="og:image" content="http://example.com/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E5%9B%BE%E5%83%8F%E6%93%8D%E4%BD%9C.png">
+<meta property="og:image" content="http://example.com/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E5%9B%BE%E5%83%8F%E5%9B%BE.png">
 <meta property="article:published_time" content="2022-09-16T07:24:29.000Z">
-<meta property="article:modified_time" content="2022-09-16T09:48:41.465Z">
+<meta property="article:modified_time" content="2022-09-16T11:02:56.370Z">
 <meta property="article:author" content="HK">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/.com//blog/public/img/%E9%94%90%E5%8C%96%E5%8D%B7%E7%A7%AF%E6%A0%B8.png">
+<meta name="twitter:image" content="http://example.com/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E9%94%90%E5%8C%96%E5%8D%B7%E7%A7%AF%E6%A0%B8.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -198,10 +198,13 @@ src.ptr&lt;uchar&gt;(row);//表示获取以uchar类型获取该row行的指针
 saturate_cast&lt;uchar&gt;(...)//表示将括号中的值限制于uchar类型的大小值中(大于uchar的最大值则等于uchar类型的最大值，反之则等于最小值，如果不大于最大也不大于最小则取原值)
 </code></pre>
 <h3 id="2，操作解析-卷积"><a href="#2，操作解析-卷积" class="headerlink" title="2，操作解析 ( 卷积 )"></a>2，操作解析 ( 卷积 )</h3><p>  卷积可谓是一个要点，也很好理解。在上述代码中卷积核如下所示( 锐化卷积核 )</p>
-<p><img src="/.com//blog\public\img/锐化卷积核.png" alt="锐化卷积核">                </p>
-<p>  卷积操作:<br> <img src="/.com//blog\public\img\图像操作.png" alt="图像操作"></p>
+<img src="/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E9%94%90%E5%8C%96%E5%8D%B7%E7%A7%AF%E6%A0%B8.png" class title="This is an example image">             
+
+<p>  卷积操作:<br> <img src="/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E5%9B%BE%E5%83%8F%E6%93%8D%E4%BD%9C.png" class title="This is an example image"></p>
 <p>  上述过程便是卷积操作，卷积操作便是使用卷积核的元素点对原图像对应的元素点相乘并相加然后赋给卷积核中心点所对应的原图像元素点的过程，根据卷积核的大小可以判断卷积开始的元素点，上述卷积核是3X3，所以开始元素点必须是第二行二列，而且结束点也不能在最边上的列与行，这点很好理解，不多解释了。</p>
-<h3 id="3，对于疑点的解决"><a href="#3，对于疑点的解决" class="headerlink" title="3，对于疑点的解决"></a>3，对于疑点的解决</h3><p>  对于这些疑点，看到了一个图之后便是完全解决了<br><img src="/.com//blog\public\img\图像图.png" alt="图像图"></p>
+<h3 id="3，对于疑点的解决"><a href="#3，对于疑点的解决" class="headerlink" title="3，对于疑点的解决"></a>3，对于疑点的解决</h3><p>  对于这些疑点，看到了一个图之后便是完全解决了            </p>
+<img src="/2022/09/16/OpenCV%E4%B9%8B%E6%8E%A9%E8%86%9C%E6%93%8D%E4%BD%9C/%E5%9B%BE%E5%83%8F%E5%9B%BE.png" class title="This is an example image">
+
 <p>然后根据这张图来解决疑点</p>
 <h4 id="（1），疑点一"><a href="#（1），疑点一" class="headerlink" title="（1），疑点一"></a>（1），疑点一</h4><pre><code>int cols = (src.cols - 1)*src.channels();一张图像包括了bgr三个通道，src.cols所指的值是这个图像单个通道的列数，单个通道的劣势-1后乘以通道数，便是得到了所有需要操作的列数，便是从第下标为3，列数为4的列数开始操作，一直到倒数第4列
 </code></pre>
